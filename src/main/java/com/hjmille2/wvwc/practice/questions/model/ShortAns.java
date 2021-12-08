@@ -1,8 +1,9 @@
 package com.hjmille2.wvwc.practice.questions.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -21,31 +22,22 @@ import lombok.experimental.Accessors;
 @Accessors(chain=true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="mult_choice_questions") 
-public class MultipleChoice {
-    
-    @Id
-    @Column(name = "question_id")
+@Table(name="short_answer_questions") 
+public class ShortAns {
+
+    @Id 
+    @Column(name="question_id")
     private Long question_id; 
+    
+    @Column(name="answer", table = "short_answer_questions", nullable = false)
+    private String answer; 
 
-    @Column(name = "correct_ans", nullable = false)
-    private String correct_ans;
-
-    @Column(name = "opt_1", nullable = false)
-    private String opt_1; 
-
-    @Column(name = "opt_2", nullable = false)
-    private String opt_2;
-
-    @Column(name = "opt_3", nullable = true)
-    private String opt_3; 
-
-    @Column(name = "explanation", nullable = true)
-    private String explanation; 
+    @Column(name="explanation", table = "short_answer_questions", nullable = true)
+    private String shortAnsExplanation;
 
     @OneToOne
     @MapsId
     @JoinColumn(name="question_id")
     private Questions question; 
-
+    
 }
