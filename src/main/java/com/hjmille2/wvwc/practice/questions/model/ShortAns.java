@@ -38,6 +38,7 @@ public class ShortAns {
     @OneToOne
     @MapsId
     @JoinColumn(name="question_id")
+    @Setter @Getter
     private Questions question; 
     
 }

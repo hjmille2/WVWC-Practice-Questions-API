@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.hjmille2.wvwc.practice.questions.Services.QuestionsService;
 import com.hjmille2.wvwc.practice.questions.exceptions.ResourceNotFoundException;
+import com.hjmille2.wvwc.practice.questions.model.MultipleChoiceRequest;
 import com.hjmille2.wvwc.practice.questions.model.Questions;
+import com.hjmille2.wvwc.practice.questions.model.ShortAnswerRequest;
 import com.hjmille2.wvwc.practice.questions.repository.QuestionsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionsController {
     @Autowired
     private QuestionsRepository questionsRepository; 
+
+    @Autowired
+    private QuestionsService questionsService; 
 
 
     @GetMapping("/questions")
@@ -62,11 +68,20 @@ public class QuestionsController {
         return ResponseEntity.ok().body(questionTypes); 
     }
 
+    @PostMapping("/questions/mult_choice")
+    public ResponseEntity<?> createNewMultipleChoice(@RequestBody MultipleChoiceRequest request){ 
+        MultipleChoiceRequest multChoiceRequest = questionsService.createMultipleChoiceQuestion(request); 
 
-    @PostMapping("/questions")
-    public Questions createQuestion(@Valid @RequestBody Questions question){
-        return questionsRepository.save(question); 
+        return ResponseEntity.ok().body(multChoiceRequest); 
     }
+
+    @PostMapping("/questions/short_ans")
+    public ResponseEntity<?> createNewShortAns(@RequestBody ShortAnswerRequest request){
+        ShortAnswerRequest shortAnsRequest = questionsService.createShortAnswerQuestions(request); 
+
+        return ResponseEntity.ok().body(shortAnsRequest); 
+    }
+    
 
     @PutMapping("/questions/{question_id}")
     public ResponseEntity<Questions> updateQuestion(

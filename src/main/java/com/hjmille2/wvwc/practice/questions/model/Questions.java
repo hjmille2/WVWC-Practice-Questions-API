@@ -7,6 +7,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -27,8 +28,9 @@ import lombok.experimental.Accessors;
 public class Questions {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
+    @Column(name = "question_id")
     private Long question_id; 
 
     @Getter @Setter
@@ -48,11 +50,11 @@ public class Questions {
     private String question_class; 
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @Getter @Setter
     private MultipleChoice mult_choice; 
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @Getter @Setter
     private ShortAns shortAns;
 
 }
