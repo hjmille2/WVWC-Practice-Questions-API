@@ -48,11 +48,11 @@ public class QuestionsController {
     }
 
 
-    // @GetMapping("/questions/short_ans")
-    // public ResponseEntity<?> getShortAns(){
-    //     List<Questions> questions = questionsRepository.getAllShortAns(); 
-    //     return ResponseEntity.ok().body(questions); 
-    // }
+    @GetMapping("/questions/short_ans")
+    public ResponseEntity<?> getShortAns(){
+        List<Question> questions = questionsRepository.getAllShortAns(); 
+        return ResponseEntity.ok().body(questions); 
+    }
 
     @GetMapping("/questions/classes")
     public ResponseEntity<?> getAllClasses(){
@@ -67,7 +67,7 @@ public class QuestionsController {
     }
 
     @PostMapping("/questions")
-    public ResponseEntity<?> createNewMultipleChoice(@RequestBody Question request){ 
+    public ResponseEntity<?> createNewQuestion(@RequestBody Question request){ 
          Question questionResp = questionService.createNewQuestion(request);
 
         return ResponseEntity.ok().body(questionResp); 

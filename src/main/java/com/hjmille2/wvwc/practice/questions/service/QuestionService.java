@@ -10,7 +10,9 @@ public interface QuestionService {
     
     public Question createNewQuestion(Question question);
     public Question createNewMultipleChoice(Question question); 
+    public Question createNewShortAns(Question question); 
 
     public Question updateQuestion(Long questionId, Question newQuestionDetails) throws ResourceNotFoundException; 
     public Question updateMultipleChoice(Question question, Question newQuestionDetails); 
+    public Question updateShortAns(Question question, Question newQuestionDetails);
 }

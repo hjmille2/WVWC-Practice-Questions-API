@@ -53,8 +53,12 @@ public class Question {
     private String question_class; 
 
     @Getter @Setter
-    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     @JsonManagedReference
     private MultipleChoice mult_choice; 
 
+    @Getter @Setter
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @JsonManagedReference
+    private ShortAns short_ans; 
 }

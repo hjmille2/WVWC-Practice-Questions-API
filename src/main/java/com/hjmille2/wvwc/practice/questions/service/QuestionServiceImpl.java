@@ -3,6 +3,7 @@ package com.hjmille2.wvwc.practice.questions.service;
 import com.hjmille2.wvwc.practice.questions.exceptions.ResourceNotFoundException;
 import com.hjmille2.wvwc.practice.questions.model.MultipleChoice;
 import com.hjmille2.wvwc.practice.questions.model.Question;
+import com.hjmille2.wvwc.practice.questions.model.ShortAns;
 import com.hjmille2.wvwc.practice.questions.repository.QuestionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService{
             return createNewMultipleChoice(question); 
         }
         else {
-            return question; 
+            return createNewShortAns(question); 
         }
     }
 
@@ -27,6 +28,12 @@ public class QuestionServiceImpl implements QuestionService{
         MultipleChoice multChoice = question.getMult_choice(); 
         multChoice.setQuestion(question); 
         return questionRepository.save(question);
+    }
+
+    public Question createNewShortAns(Question question){
+        ShortAns shortAns = question.getShort_ans(); 
+        shortAns.setQuestion(question); 
+        return questionRepository.save(question); 
     }
 
     public Question updateQuestion(Long questionId, Question newQuestionDetails)
@@ -38,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService{
             } 
             else {
                 //will be changed in future with short ans
-                return q; 
+                return updateShortAns(q, newQuestionDetails); 
             }
         })
         .orElseThrow(
@@ -50,10 +57,7 @@ public class QuestionServiceImpl implements QuestionService{
 
     public Question updateMultipleChoice(Question question, Question newQuestionDetails){
         //update question
-        question.setQuestion(newQuestionDetails.getQuestion()); 
-        question.setQuestion_category(newQuestionDetails.getQuestion_category()); 
-        question.setQuestion_class(newQuestionDetails.getQuestion_class()); 
-        question.setQuestion_type(newQuestionDetails.getQuestion_type()); 
+        updateQuestionValues(question, newQuestionDetails); 
 
         MultipleChoice multChoice = question.getMult_choice(); 
         multChoice.setQuestion(question);
@@ -64,5 +68,25 @@ public class QuestionServiceImpl implements QuestionService{
         multChoice.setOpt_3(newQuestionDetails.getMult_choice().getOpt_3()); 
 
         return questionRepository.save(question); 
+    }
+
+    public Question updateShortAns(Question question, Question newQuestionDetails){
+        updateQuestionValues(question, newQuestionDetails); 
+
+        ShortAns shortAns = question.getShort_ans(); 
+        shortAns.setQuestion(question); 
+        shortAns.setAnswer(newQuestionDetails.getShort_ans().getAnswer());
+        shortAns.setExplanation(newQuestionDetails.getShort_ans().getExplanation());
+
+        return questionRepository.save(question); 
+    }
+
+    private Question updateQuestionValues(Question question, Question newQuestionDetails){
+        question.setQuestion(newQuestionDetails.getQuestion()); 
+        question.setQuestion_category(newQuestionDetails.getQuestion_category()); 
+        question.setQuestion_class(newQuestionDetails.getQuestion_class()); 
+        question.setQuestion_type(newQuestionDetails.getQuestion_type()); 
+
+        return question; 
     }
 }
