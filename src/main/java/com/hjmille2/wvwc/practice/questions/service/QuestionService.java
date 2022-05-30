@@ -14,4 +14,5 @@ public interface QuestionService {
 
     public Question updateQuestion(Long questionId, Question newQuestionDetails) throws ResourceNotFoundException; 
     public Question updateMultipleChoice(Question question, Question newQuestionDetails); 
+    public Question updateShortAns(Question question, Question newQuestionDetails);
 }
