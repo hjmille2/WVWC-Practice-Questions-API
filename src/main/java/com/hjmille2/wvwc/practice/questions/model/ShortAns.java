@@ -4,6 +4,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -25,20 +27,19 @@ import lombok.experimental.Accessors;
 @Table(name="short_answer_questions") 
 public class ShortAns {
 
-    @Id 
-    @Column(name="question_id")
-    private Long question_id; 
+    @Id
+    @Column(name="mult_choice_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long short_ans_id; 
+
+    @Column(name = "question_id")
+    @Getter @Setter
+    private Long question_id;  
     
     @Column(name="answer", table = "short_answer_questions", nullable = false)
     private String answer; 
 
     @Column(name="explanation", table = "short_answer_questions", nullable = true)
     private String shortAnsExplanation;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="question_id")
-    @Setter @Getter
-    private Questions question; 
     
 }
