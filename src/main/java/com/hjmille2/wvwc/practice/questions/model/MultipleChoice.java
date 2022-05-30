@@ -1,13 +1,17 @@
 package com.hjmille2.wvwc.practice.questions.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +27,15 @@ import lombok.experimental.Accessors;
 public class MultipleChoice {
     
     @Id
-    @Column(name = "question_id")
+    @Column(name="mult_choice_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mult_choice_id; 
+    
     @Getter @Setter
-    private Long question_id; 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name= "question_id", nullable = false)
+    @JsonBackReference
+    private Question question; 
 
     @Column(name = "correct_ans", nullable = false)
     @Getter @Setter
@@ -45,13 +55,6 @@ public class MultipleChoice {
 
     @Column(name = "explanation", nullable = true)
     @Getter @Setter
-    private String explanation; 
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name="question_id")
-    @Setter
-    @Getter
-    private Questions question; 
+    private String explanation;
 
 }

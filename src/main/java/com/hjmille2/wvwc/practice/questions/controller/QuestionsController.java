@@ -4,12 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.hjmille2.wvwc.practice.questions.Services.QuestionsService;
 import com.hjmille2.wvwc.practice.questions.exceptions.ResourceNotFoundException;
-import com.hjmille2.wvwc.practice.questions.model.MultipleChoiceRequest;
-import com.hjmille2.wvwc.practice.questions.model.Questions;
-import com.hjmille2.wvwc.practice.questions.model.ShortAnswerRequest;
-import com.hjmille2.wvwc.practice.questions.repository.QuestionsRepository;
+import com.hjmille2.wvwc.practice.questions.model.MultipleChoice;
+import com.hjmille2.wvwc.practice.questions.model.Question;
+import com.hjmille2.wvwc.practice.questions.repository.QuestionRepository;
+import com.hjmille2.wvwc.practice.questions.service.QuestionServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,40 +20,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/wvwc-practice-questions/v1")
 public class QuestionsController {
     @Autowired
-    private QuestionsRepository questionsRepository; 
+    private QuestionRepository questionsRepository; 
 
     @Autowired
-    private QuestionsService questionsService; 
-
+    private QuestionServiceImpl questionService; 
 
     @GetMapping("/questions")
     public ResponseEntity<?> getAllQuestions() {
-        List<Questions> questions = questionsRepository.findAll(); 
+        List<Question> questions = questionsRepository.findAll(); 
         return ResponseEntity.ok().body(questions);  
     }
 
-    @GetMapping("/questions/{question_id}")
-    public ResponseEntity<Questions> getQuestionById(@PathVariable(value="question_id") Long question_id)
-        throws ResourceNotFoundException {
-            Questions question = questionsRepository.findById(question_id).orElseThrow(
-                () -> new ResourceNotFoundException("Question not found on :: " + question_id)
-            ); 
+    // @GetMapping("/questions/{question_id}")
+    // public ResponseEntity<Questions> getQuestionById(@PathVariable(value="question_id") Long question_id)
+    //     throws ResourceNotFoundException {
+    //         Questions question = questionsRepository.findById(question_id).orElseThrow(
+    //             () -> new ResourceNotFoundException("Question not found on :: " + question_id)
+    //         ); 
 
-            return ResponseEntity.ok().body(question); 
-    }
+    //         return ResponseEntity.ok().body(question); 
+    // }
 
     @GetMapping("/questions/mult_choice")
     public ResponseEntity<?> getMultipleChoice(){
-         List<Questions> questions = questionsRepository.getAllMultipleChoice(); 
+         List<Question> questions = questionsRepository.getAllMultipleChoice(); 
          return ResponseEntity.ok().body(questions); 
     }
 
 
-    @GetMapping("/questions/short_ans")
-    public ResponseEntity<?> getShortAns(){
-        List<Questions> questions = questionsRepository.getAllShortAns(); 
-        return ResponseEntity.ok().body(questions); 
-    }
+    // @GetMapping("/questions/short_ans")
+    // public ResponseEntity<?> getShortAns(){
+    //     List<Questions> questions = questionsRepository.getAllShortAns(); 
+    //     return ResponseEntity.ok().body(questions); 
+    // }
 
     @GetMapping("/questions/classes")
     public ResponseEntity<?> getAllClasses(){
@@ -68,35 +66,19 @@ public class QuestionsController {
         return ResponseEntity.ok().body(questionTypes); 
     }
 
-    @PostMapping("/questions/mult_choice")
-    public ResponseEntity<?> createNewMultipleChoice(@RequestBody MultipleChoiceRequest request){ 
-        MultipleChoiceRequest multChoiceRequest = questionsService.createMultipleChoiceQuestion(request); 
+    @PostMapping("/questions")
+    public ResponseEntity<?> createNewMultipleChoice(@RequestBody Question request){ 
+         Question questionResp = questionService.createNewQuestion(request);
 
-        return ResponseEntity.ok().body(multChoiceRequest); 
-    }
-
-    @PostMapping("/questions/short_ans")
-    public ResponseEntity<?> createNewShortAns(@RequestBody ShortAnswerRequest request){
-        ShortAnswerRequest shortAnsRequest = questionsService.createShortAnswerQuestions(request); 
-
-        return ResponseEntity.ok().body(shortAnsRequest); 
+        return ResponseEntity.ok().body(questionResp); 
     }
     
 
     @PutMapping("/questions/{question_id}")
-    public ResponseEntity<Questions> updateQuestion(
-        @PathVariable(value="question_id") Long question_id, @Valid @RequestBody Questions questionDetails
+    public ResponseEntity<Question> updateQuestion(
+        @PathVariable(value="question_id") Long question_id, @Valid @RequestBody Question questionDetails
     ) throws ResourceNotFoundException{
-        Questions question = questionsRepository.findById(question_id).orElseThrow(
-            () -> new ResourceNotFoundException("Question not found on :: " + question_id)
-        ); 
-
-        question.setQuestion_type(questionDetails.getQuestion_type()); 
-        question.setQuestion(questionDetails.getQuestion());
-        question.setQuestion_category(questionDetails.getQuestion_category());
-        question.setQuestion_class(questionDetails.getQuestion_class());
-
-        final Questions updatedQuestion = questionsRepository.save(question); 
+        Question updatedQuestion = questionService.updateQuestion(question_id, questionDetails); 
 
         return ResponseEntity.ok(updatedQuestion); 
     }
