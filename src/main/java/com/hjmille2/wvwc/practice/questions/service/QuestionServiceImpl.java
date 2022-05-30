@@ -3,6 +3,7 @@ package com.hjmille2.wvwc.practice.questions.service;
 import com.hjmille2.wvwc.practice.questions.exceptions.ResourceNotFoundException;
 import com.hjmille2.wvwc.practice.questions.model.MultipleChoice;
 import com.hjmille2.wvwc.practice.questions.model.Question;
+import com.hjmille2.wvwc.practice.questions.model.ShortAns;
 import com.hjmille2.wvwc.practice.questions.repository.QuestionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService{
             return createNewMultipleChoice(question); 
         }
         else {
-            return question; 
+            return createNewShortAns(question); 
         }
     }
 
@@ -27,6 +28,12 @@ public class QuestionServiceImpl implements QuestionService{
         MultipleChoice multChoice = question.getMult_choice(); 
         multChoice.setQuestion(question); 
         return questionRepository.save(question);
+    }
+
+    public Question createNewShortAns(Question question){
+        ShortAns shortAns = question.getShort_ans(); 
+        shortAns.setQuestion(question); 
+        return questionRepository.save(question); 
     }
 
     public Question updateQuestion(Long questionId, Question newQuestionDetails)

@@ -12,6 +12,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +21,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Entity
-@Getter
-@Setter
 @Accessors(chain=true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,18 +28,22 @@ import lombok.experimental.Accessors;
 public class ShortAns {
 
     @Id
-    @Column(name="mult_choice_id")
+    @Column(name="short_ans_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long short_ans_id; 
 
-    @Column(name = "question_id")
     @Getter @Setter
-    private Long question_id;  
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name= "question_id", nullable = false)
+    @JsonBackReference
+    private Question question;  
     
-    @Column(name="answer", table = "short_answer_questions", nullable = false)
+    @Getter @Setter
+    @Column(name="answer", nullable = false)
     private String answer; 
 
-    @Column(name="explanation", table = "short_answer_questions", nullable = true)
-    private String shortAnsExplanation;
+    @Getter @Setter
+    @Column(name="explanation", nullable = true)
+    private String explanation;
     
 }
