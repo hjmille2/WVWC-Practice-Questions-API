@@ -26,20 +26,14 @@ public class QuestionsController {
     private QuestionServiceImpl questionService; 
 
     @GetMapping("/questions")
-    public ResponseEntity<?> getAllQuestions() {
-        List<Question> questions = questionsRepository.findAll(); 
+    public ResponseEntity<?> getAllQuestions(
+        @RequestParam(required = false) String[] question_type,
+        @RequestParam(required = false) String[] question_category,
+        @RequestParam(required = false) String[] question_class
+    ) {
+        List<Question> questions = questionsRepository.getAllQuestions(question_type, question_category, question_class);
         return ResponseEntity.ok().body(questions);  
     }
-
-    // @GetMapping("/questions/{question_id}")
-    // public ResponseEntity<Questions> getQuestionById(@PathVariable(value="question_id") Long question_id)
-    //     throws ResourceNotFoundException {
-    //         Questions question = questionsRepository.findById(question_id).orElseThrow(
-    //             () -> new ResourceNotFoundException("Question not found on :: " + question_id)
-    //         ); 
-
-    //         return ResponseEntity.ok().body(question); 
-    // }
 
     @GetMapping("/questions/mult_choice")
     public ResponseEntity<?> getMultipleChoice(){
